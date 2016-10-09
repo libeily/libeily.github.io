@@ -1,0 +1,19 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "Welcome to Libei Blog"
+subtitle:   " \"Hello World, Hello Blog\""
+date:       2016-10-09 12:00:00
+author:     "Libei"
+tags:
+    - 感想
+    - 前端技术
+---
+
+> “Yeah It's on. ”
+
+
+## 激动
+
+Libei 的 Blog 就这么开通了。
+

@@ -1,0 +1,130 @@
+---
+title: Portfolio
+layout: default
+---
+
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hux - Timeline</title>
+	<link rel="stylesheet" type="text/css" href="css/timeline.css" />
+	<script src="js/modernizr.custom.js"></script>
+</head>
+<body>
+<div class="container" style="margin:0;padding:0;width:100%;">
+	<header>
+		<img width="190" height="190" src="images/libei-icon.jpg" style="border-radius: 100%">
+		<p> A New Front End Engineer;<br>
+			majoring in A single-page application (SPA) and Data Visualization</p>
+	</header>
+	<div class="main">
+		<ul class="cbp_tmtimeline">
+			<li>
+				<div class="cbp_tmlabel">
+					<h2 id="boxoffice">电子科技大学学生事务中心</h2>
+					<time>2014.10</time>
+					<img src="images/uestc-worker.png">
+					<ul>
+						<li>
+							电子科技大学学生事务中心为学生提供一站式服务,包括信息通知、网上业务办理、信息通知等
+						</li>
+						<li class="skill">
+							<span><b>JS</b></span>
+							<span class="i-jquery"></span>
+							<span class="link"><a target="_blank" href="http://service.uestc.edu.cn/">Try it</a></span>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="cbp_tmlabel">
+					<h2 id="busyweek">爱互融</h2>
+					<time>2015.02</time>
+					<img src="images/ihurong.png">
+					<ul>
+						<li>
+							爱互融是一个消费金融平台，初期的切入点是大学生的消费分期。成都汇众信息技术有限公司旗下产品。
+						</li>
+						<li class="skill">
+							<span class="cbp_tmicon-phone"></span>
+							<span><b>JS</b></span>
+							<span class="link"><a target="_blank" href="http://ihurong.com/">Try it</a></span>
+						</li>
+					</ul>
+				</div>
+			<li>
+			<li>
+				<div class="cbp_tmlabel">
+					<h2>行业360</h2>
+					<time>2015</time>
+
+					<ul>
+						<li>
+							从概况、子行业、卖家、品牌、来源通道、买家提供行业的多个维度分析，诊断行业问题，发现行业机会
+						</li>
+						<li class="skill">
+							<span style="margin-right:40px;margin-left: 20px;"><b>Require</b></span>
+							<span><b>Angular</b></span>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="cbp_tmlabel">
+					<h2 id="hslider">U-DMP</h2>
+					<time>2016.07</time>
+					<img src="images/UDMP.png">
+					<ul>
+						<li>
+							安全，精准，丰富的第三方数据服务平台,在【友盟+】提供的所有标签范围内，对标签进行自定义组合，选择与广告匹配的目标受众,投放渠道通过数据接口获得【友盟+】圈出的目标受众，并对目标人群定向投放，提高广告的ROI和TA占比。
+						</li>
+						<li class="skill">
+							<span><b>JS</b></span>
+							<span class="i-react"></span>
+							<span class="link"><a target="_blank" href="https://dmp.umeng.com/">U-DMP</a></span>
+						</li>
+					</ul>
+				</div>
+			</li>
+			{% if site.duoshuo_username %}
+			<li>
+				<div class="cbp_tmlabel">
+					<!-- 多说评论框 start -->
+					<div class="comment">
+						<div class="ds-thread"
+							 data-thread-key="{{site.duoshuo_username}}/portfolio"
+							 data-title="{{page.title}}"
+							 data-url="{{site.url}}{{site.baseurl}}{{page.url}}" >
+						</div>
+					</div>
+					<!-- 多说评论框 end -->
+				</div>
+			</li>
+			{% endif %}
+		</ul>
+	</div>
+</div>
+{% if site.duoshuo_username %}
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+	// dynamic User by Hux
+	var _user = '{{site.duoshuo_username}}';
+
+	// duoshuo comment query.
+	var duoshuoQuery = {short_name: _user };
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+{% endif %}
+</body>
+</html>

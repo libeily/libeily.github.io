@@ -1,0 +1,121 @@
+---
+layout: page
+header-img: "img/about-bg.jpg"
+title: "About"
+description: "Hi,it's me"
+---
+
+
+
+<!-- English Version -->
+
+
+<div class="content containe resume clears">
+    <!--<div class="myPic borderPic"></div>-->
+    <div class="resumeBlock introduction">
+        <p>从2014年创办工作室而接触到前端领域，在期间完成了爱互融、电子科大一站式事务中心、王道训练营、蓝画笔教育等项目;2015年参加了百度前端学院第一期培训,深入理解前端的一些基本知识;
+            2015年夏天阿里实习,规范前端的学习,并使用angular,requirejs,grunt开发单页应用项目,很幸运的是,迎接阿里的拥抱变化潮流,留在了阿里工作,并于2016.07,入职友盟+,使用react,webpack等技术进行项目的构建和开发。
+            现如今,还有很多的知识需要学习,加油吧!</p>
+    </div>
+    <div class="line"></div>
+    <div class="resumeContent">
+
+        <img src="/img/mypic.jpg" class="middlePic" alt=""/>
+        <div class="resumeBlock">
+            <p class="resumeTag clearFix">教育经历</p>
+            <div class="tagContent title clearFix">
+                <p class="schedule"><span class="year">2009</span>郑州大学 计算机学院</p>
+                <p class="schedule"><span class="year">2013</span>UESTC 计算机学院</p>
+                <P class="schedule"><span class="year">2016</span>阿里-友盟+</P>
+            </div>
+        </div>
+        <img src="/img/mypic.jpg" class="middlePic" alt=""/>
+        <div class="resumeBlock">
+            <p class="resumeTag clearFix">成长经历</p>
+            <div class="tagContent title clearFix">
+                <p class="schedule"><span class="year" style="height: 48px">2014-2015</span><span>创办黑户工作室</span></p>
+                <p class="schedule"><a href="http://www.ihurong.com/">商业-爱互融</a></p>
+                <p class="schedule"><a href="http://service.uestc.edu.cn/">学校-电子科大一站式事务中心</a></p>
+                <p class="schedule"><a href="http://114.215.157.15/">王道训练营</a></p>
+                <p class="schedule"><a href="http://121.42.150.222/">商业-蓝画笔教育 </a></p>
+                <p class="schedule"><span class="year">2015</span><span>百度培训</span></p>
+                <p class="schedule"><a href="https://github.com/baidu-ife/ife">百度前端技术学院 </a></p>
+                <p class="schedule"><span class="year">2015</span><span>阿里-数据技术及产品部</span></p>
+                <p class="schedule"><a>阿里实习-360(内部) </a></p>
+                <p class="schedule"><span class="year">2016</span><span>入职-阿里友盟+ </span></p>
+                <p class="schedule"><a href="https://dmp.umeng.com">UDMP</a></p>
+                <p class="schedule"><a>微社区改版</a></p>
+            </div>
+        </div>
+        <div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Handle Language Change -->
+
+
+
+
+{% if site.duoshuo_username %}
+<!-- 多说评论框 start -->
+<div class="comment">
+    <div class="ds-thread"
+    {% if site.duoshuo_username == "木子被LY" %}
+        data-thread-id="1187623191091085319"
+    {% else %}
+        data-thread-key="{{site.duoshuo_username}}/about"
+    {% endif %}
+
+    data-title="{{page.title}}"
+    data-url="{{site.url}}/about/"></div>
+</div>
+<!-- 多说评论框 end -->
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User hacking by Hux
+    var _user = '{{site.duoshuo_username}}';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+{% endif %}
+
+
+{% if site.disqus_username %}
+<!-- disqus 评论框 start -->
+<div class="comment">
+    <div id="disqus_thread" class="disqus-thread">
+
+    </div>
+</div>
+<!-- disqus 评论框 end -->
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "{{site.disqus_username}}";
+    var disqus_identifier = "{{site.disqus_username}}/{{page.url}}";
+    var disqus_url = "{{site.url}}{{page.url}}";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+{% endif %}
