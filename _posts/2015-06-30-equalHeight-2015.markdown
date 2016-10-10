@@ -1,0 +1,25 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "等高自适应"
+subtitle:   "三个div仅使用CSS实现同等高度自适应 "
+date:       2015-04-30 12:00:00
+author:     "LiBei"
+tags:
+    - 前端技术
+    - 百度前端技术学院
+    - css
+---
+
+> “Equal Height”
+
+
+
+首先把列的padding-bottom设为一个足够大的值500000，至于这个数你可以理解成“足够大”，以便于有足够的空间去扩展它的盒子， 这么高应该是巨人症吧，没关系，我们可以用margin-bottom的负值去隐藏它，再把列的margin-bottom设一个与前面的padding-bottom的正值相抵消的负值， 父容器设置超出隐藏，这样父容器的高度就还是它里面的列没有设定padding-bottom时的高度，当它里面的任一列高度增加了，则父容器的高度被撑到它里面 最高那列的高度，
+其他比这列矮的列则会用它们的padding-bottom来补偿这部分高度差。因为背景是可以用在padding占用的空间里的， 而且边框也是跟随padding变化的，所以就成功的完成了一个障眼法。
+
+<img src =" /img/in-post/equalHeight.jpg">
+
+
+
+—— Libei 后记于 2016.10
