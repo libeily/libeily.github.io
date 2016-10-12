@@ -6,7 +6,6 @@ subtitle:   " "
 date:       2015-07-30 12:00:00
 author:     "LiBei"
 tags:
-    - 前端技术
     - 心得
 ---
 

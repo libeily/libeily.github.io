@@ -7,7 +7,6 @@ date:       2016-10-09 12:00:00
 author:     "Libei"
 tags:
     - 感想
-    - 前端技术
 ---
 
 > “Yeah It's on. ”
