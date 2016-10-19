@@ -1,0 +1,73 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "无刷新改变URL"
+subtitle:   "Window.history--pushState &&replaceState "
+date:       2016-10-09 12:00:00
+author:     "LiBei"
+tags:
+    - js
+---
+
+> “无刷新改变URL”
+
+## 问题
+
+在做项目的时候遇到这个问题,页面1中有三个Tab切换,其中每个切换页会跳转到其他的页面上去,在其他页面做完相应的操作再跳回到页面1后,页面1将会重新加载,那么如何能直接跳转前的tab选项卡直接显示出来呢?
+
+解决方法是将tab的num保存在浏览器中的url中 /user?tab=3那么就可以根据浏览器的参数获取到tab的展开项,如何不刷新页面改变URL呢
+
+## 无跳转改变url
+
+HTML5的新API扩展了window.history，使历史记录点更加开放了。可以存储当前历史记录点、替换当前历史记录点、监听历史记录点
+
+* 存储当前历史记录点
+
+{% highlight js %}
+// 当前的url为：http://qianduanblog.com/index.html
+var json={time:new Date().getTime()};
+// @状态对象：记录历史记录点的额外对象，可以为空 (通常都设置为空)
+// @页面标题：目前所有浏览器都不支持
+// @可选的url：浏览器不会检查url是否存在，只改变url，url必须同域，不能跨域
+window.history.pushState(json,"","http://qianduanblog.com/post-1.html");</pre>
+执行了pushState方法后，页面的url地址为http://qianduanblog.com/post-1.html
+ {% endhighlight %}
+
+* 替换当前历史记录点
+window.history.replaceState和window.history.pushState类似，不同之处在于replaceState不会在window.history里新增历史记录点，其效果类似于window.location.replace(url)，
+都是不会在历史记录点里新增一个记录点的。当你为了响应用户的某些操作，而要更新当前历史记录条目的状态对象或URL时，使用replaceState()方法会特别合适。
+
+* 区别
+    - 使用pushState replaceState 都会修改浏览器的url
+    - 使用 pushState 会将用户所有的url都记录下来,比如首先在index页面跳转到tab页面,那么点击tab1的时候url=/user?tab=1;在点击tab2的时候url=/user?tab=2;
+    如果在tab2的状态下点击浏览器的后退,那么页面将会回退到url=/user?tab=1;然而用 replaceState 时,点击后退将会直接回到index页面
+
+## 具体实现 ##
+
+{% highlight js %}
+tabClick(key) {
+    history.replaceState('', '', '/user?tab=' + key);
+  }
+ {% endhighlight %}
+
+{% highlight js %}
+getUrlParam: function (paramKey) {
+    //获取地址参数值
+    var search = decodeURIComponent(location.search), val, params;
+    if (search && search.length > 1) {
+      search = search.slice(1);
+      params = search.split('&');
+      for (var i = 0; i < params.length; i++) {
+        var param = params[i];
+        if (param.split('=').length && String(param.split('=')[0]) === String(paramKey)) {
+          val = String(param.split('=')[1])=='undefined'?'':String(param.split('=')[1]);
+          break;
+        }
+      }
+    }
+    return val;
+  },
+{% endhighlight %}
+
+
+—— Libei 于 2016.10

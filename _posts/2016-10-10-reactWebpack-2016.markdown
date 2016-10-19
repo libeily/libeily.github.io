@@ -277,9 +277,7 @@ url-loader 传入的 limit 参数是告诉它图片如果不大于 25KB 的话�
 
  使用 React JS 和 react-hot-loader 可以让你去改变组件中的 class 代码，然后可以在 DOM 上看到实时更新了实例，没有修改他们的状态！看起来就像 CSS 更新一样，不过是换成了组件,此时webpack.config.js如下
 {% highlight js %}
-/**
- * Created by liyan on 16/10/12.
- */
+
 var path = require('path');
 var webpack = require('webpack')
 module.exports = {
