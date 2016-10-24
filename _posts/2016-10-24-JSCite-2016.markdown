@@ -1,0 +1,82 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "JS 参数传递"
+subtitle:   "JavaScript 按值传递 & 按引用传递"
+date:       2016-10-23 21:00:00
+author:     "Libei"
+tags:
+    - js
+---
+  > “值比较与引用比较”  
+
+## 值的比较
+
+首先，原始值的比较是值的比较：只有在它们值相等的时候它们才相等,比如简单的
+{% highlight js%}
+var a1 = 10;
+var a2 = 10;
+console.log(a1 === a2); //true
+{% endhighlight %}
+## 引用的比较
+其次，对象的比较并非值的比较：对象的比较均是引用的比较，当且仅当它们引用同一个基对象时，它们才相等。
+即使两个对象包含同样的属性和相同的值，它们也是不相等的。各个索引元素完全相等的两个数组也不相等
+{% highlight js%}
+var o = {x:1},p={x:1};
+console.log(o === p); //false 两个单独的对象不相等
+var a = ['you'],b = ['you'];
+console.log(a === b); //false 两个单独的数组不相等
+{% endhighlight %}
+{% highlight js%}
+var a = [];
+var b = a;      // b 引用了同一个数组a
+b[0] = "you";
+console.log(a[0]); // you   这是a也会修改
+console.log(a === b); //true
+{% endhighlight %}
+
+> 参数传递
+
+* JS的基本类型是按值传递的
+{% highlight js%}
+var a = 1;
+function foo(a) {
+    a = 2;
+    console.log(a);  //此副本为2
+}
+foo(a);
+console.log(a); // 仍为1, 未受a = 2赋值所影响
+{% endhighlight %}
+
+* JS对象类型按共享传递
+{% highlight js%}
+var obj = {x : 1};
+function foo(o) {
+    o.x = 3;
+  console.log(obj.x); // 3, 被修改了!
+}
+foo(obj);
+console.log(obj.x); // 3, 也被修改了!
+{% endhighlight %}
+
+* 该策略的重点是：调用函数传参时，函数接受对象实参引用的副本(既不是按值传递的对象副本，也不是按引用传递的隐式引用)。
+* 它和按引用传递的不同在于：在共享传递中对函数形参的赋值，不会影响实参的值。如上面例子中，不可以通过修改形参o的值，来修改obj的值。
+* 然而，虽然引用是副本，引用的对象是相同的。它们共享相同的对象，所以修改形参对象的属性值o.x=3，也会影响到实参的属性值。
+
+{% highlight js%}
+function setName(obj){
+    obj.name="ted";
+    obj=new Object();
+    obj.name="marry";
+}
+var obj=new Object();
+setName(obj);
+alert(obj.name); //ted
+{% endhighlight %}
+
+## 参考资料
+
+* [http://zhaoda.net/webpack-handbook/loader.html](http://zhaoda.net/webpack-handbook/loader.html)
+* [https://fakefish.github.io/react-webpack-cookbook/Running-a-workflow.html](https://fakefish.github.io/react-webpack-cookbook/Running-a-workflow.html)
+
+  —— Libei 后记于 2016.10 
