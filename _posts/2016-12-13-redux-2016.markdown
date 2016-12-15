@@ -1,0 +1,93 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "redux理解"
+subtitle:   "redux学习笔记"
+date:       2016-12-13 21:00:00
+author:     "Libei"
+tags:
+    - react redux
+---
+  > “基本概念”  
+
+## Action
+Action 是把数据从应用传到store的有效途径，它是store的唯一来源，通过store.dispatch()将action传入store中
+* Action 内必须使用一个字符串类型的 type 字段来表示将要执行的动作
+* 在 Redux 中的 action 创建函数只是简单的返回一个 action,只需把 action 创建函数的结果传给 dispatch() 方法即可发起一次 dispatch 过程,或者创建一个 被绑定的 action 创建函数 来自动 dispatch：
+{% highlight js%}
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  }
+}
+dispatch(addTodo(text))
+{% endhighlight %}
+{% highlight js%}
+const boundAddTodo = (text) => dispatch(addTodo(text))
+boundAddTodo(text);
+{% endhighlight %}
+* store 里能直接通过 store.dispatch() 调用 dispatch() 方法，但是多数情况下你会使用 react-redux 提供的 connect() 帮助器来调用。bindActionCreators() 可以自动把多个 action 创建函数 绑定到 dispatch() 方法上。
+## Reducer
+reducer 就是一个纯函数，接收旧的 state 和 action，返回新的 state
+* 不直接修改 state 中的字段，而是返回新对象。新的 todos 对象就相当于旧的 todos 在末尾加上新建的 todo。而这个新的 todo 又是基于 action 中的数据创建的
+{% highlight js%}
+case TOGGLE_TODO:
+  return Object.assign({}, state, {
+    todos: state.todos.map((todo, index) => {
+      if (index === action.index) {
+        return Object.assign({}, todo, {
+          completed: !todo.completed
+        })
+      }
+      return todo
+    })
+  })
+{% endhighlight %}
+* 我们需要修改数组中指定的数据项而又不希望导致突变, 因此我们的做法是在创建一个新的数组后, 将那些无需修改的项原封不动移入, 接着对需修改的项用新生成的对象替换,此处突变指直接修改引用所指向的值, 而引用本身保持不变
+{% highlight js%}
+var o = {x:1},p={x:1};
+console.log(o === p); //false 两个单独的对象不相等
+var a = ['you'],b = ['you'];
+console.log(a === b); //false 两个单独的数组不相等
+{% endhighlight %}
+{% highlight js%}
+var a = [];
+var b = a;      // b 引用了同一个数组a
+b[0] = "you";
+console.log(a[0]); // you   这是a也会修改
+console.log(a === b); //true
+{% endhighlight %}
+
+## Store
+使用 action 来描述“发生了什么”，使用 reducers 来根据 action 更新 state 的用法,Store 就是把它们联系到一起的对象
+* store通过dispatch action来更新状态，根据已有的 reducer 来创建 store 是非常容易的。我们使用 combineReducers() 将多个 reducer 合并成为一个，并将合并的reducer导入，并传递 createStore()。
+{% highlight js%}
+import { createStore } from 'redux'
+import todoApp from './reducers'
+let store = createStore(todoApp)
+// 发起一系列 action来更新状态
+store.dispatch(addTodo('Learn about actions'))
+{% endhighlight %}
+
+  > “数据流”  
+
+严格的单向数据流是 Redux 架构的设计核心。Redux 应用中数据的生命周期遵循下面 4 个步骤：
+* 调用 store.dispatch(action)，可以在任何地方调用 store.dispatch(action)，包括组件中、XHR 回调中、甚至定时器中。
+* store 调用传入的 reducer 函数
+
+    1.Store 会把两个参数传入 reducer： 当前的 state 树和 action
+
+* 根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树
+
+    1.Redux 原生提供combineReducers()辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
+
+* Redux store 保存了根 reducer 返回的完整 state 树。
+
+
+## 参考资料
+
+* [http://cn.redux.js.org/docs/basics/DataFlow.html](http://cn.redux.js.org/docs/basics/DataFlow.html)
+* [源码 https://github.com/reactjs/react-redux](https://github.com/reactjs/react-redux)
+
+  —— Libei 后记于 2016.10 
