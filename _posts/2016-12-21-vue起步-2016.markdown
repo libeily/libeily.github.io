@@ -1,0 +1,284 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "vue学习笔记"
+subtitle:   "从0开始搭建 vue环境"
+date:       2016-12-20 21:00:00
+author:     "Libei"
+tags:
+    - vue webpack
+---
+ 
+## 新建目录
+首先新建一个目录，名为 vuePractice ，这是我们的项目目录。然后执行一些基本的步骤，比如 npm init 命令，在我们的项目中生成 package.json 文件，这几乎是必选的，因为我们的项目要有很多依赖，都是通过npm来管理的，而npm对于我们项目的管理，则是通过package.json文件：
+
+执行npm init之后，会提示你填写一些项目的信息，一直回车默认就好了，或者直接执行 npm init -y 直接跳过询问步骤
+
+然后我们新建一个叫做 app 的目录，这个是我们页面模块的目录，再在app目录下建立一个index目录，假设这个是首页模块的目录，然后再在index目录下建立一个 index.html 文件和 index.js 文件，分别是首页入口html文件和主js文件，然后再在index目录下建立一个components目录，这个目录用作存放首页组件模块的目录，因为我们最终要实现组件化开发。
+
+## 依赖安装
+接下来通过npm安装项目依赖项，另外我们还使用 npm install vue –save 命令安装了 vue
+
+{% highlight js%}
+npm install\
+  webpack webpack-dev-server\
+  vue-loader vue-html-loader css-loader vue-style-loader vue-hot-reload-api\
+  babel-loader babel-core babel-plugin-transform-runtime babel-preset-es2015\
+  babel-runtime@5\
+  --save-dev
+
+npm install vue --save
+{% endhighlight %}
+此时，你的package.json文件看起来应该是这样的：
+{% highlight js%}
+{
+  "name": "vue-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "vue": "^2.1.6"
+  },
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-runtime": "^5.8.38",
+    "css-loader": "^0.26.1",
+    "vue-hot-reload-api": "^2.0.6",
+    "vue-html-loader": "^1.2.3",
+    "vue-loader": "^10.0.2",
+    "vue-style-loader": "^1.0.0",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+{% endhighlight %}
+
+## 组件书写
+1、index.html文件：文件位置放置为：vuePractice->app->index.html
+{% highlight js%}
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+<my-component></my-component>
+</div>
+</body>
+</html>
+{% endhighlight %}
+2、index.js文件：文件位置放置为：vuePractice->app->index.js
+{% highlight js%}
+import Vue from 'Vue'
+import First from './components/First.vue'
+Vue.config.debug = true;//开启错误提示
+window.onload = function () {
+  new Vue({
+     el: '#app',
+     components: {
+       'my-component': First
+     }
+   });
+ }
+{% endhighlight %}
+3.在components目录下新建一个 First.vue 文件，作为我们的第一个组件：vuePractice->app->components->First.vue
+{% highlight js%}
+<template id="template-home">
+ <div>
+  <div v-for="n in 10">div</div>
+ </div>
+</template>
+<style>
+ body {
+  color: ;
+ }
+</style>
+</script>
+
+{% endhighlight %}
+
+我们首先在index.html中使用了自定义标签（即组件），然后在index.js中引入了Vue和我们的First.vue组件，First.vue文件中，我们使用了基本的vue组件语法，最后，我们希望它运行起来，这个时候，我们就需要webpack了。
+
+
+## webpack搭建
+
+webpack.config.js :文件位置放置为：vuePractice->app->build->webpack.config.js
+
+{% highlight js%}
+// nodejs 中的path模块
+var path = require('path');
+module.exports = {
+    // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件
+    entry: path.resolve(__dirname, '../app/index.js'),
+    // 输出配置
+    output: {
+        path: path.resolve(__dirname, '../output/static'),
+        publicPath: 'static/',
+        filename: '[name].[hash].js',
+        chunkFilename: '[id].[chunkhash].js'
+    },
+    module: {
+
+        loaders: [
+            // 使用vue-loader 加载 .vue 结尾的文件
+            {
+                test: /\.vue$/,
+                loader: 'vue'
+            }
+        ]
+    }
+}
+{% endhighlight %}
+* 入口文件是index.js文件，配置了相应输出，然后使用 vue-loader 去加载 .vue 结尾的文件
+* 因为我们使用了ES6的语法 import 语句，所以我们要使用 babel-loader 去加载我们的js文件
+* 其实是这样的，当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的，它并不知道 .vue 结尾的文件是什么鬼玩意儿，所以我们要在配置文件中告诉webpack，遇到 .vue 结尾的也要去加载，添加 resolve 配置项
+
+接下来可以检测下webpack是否帮我们打包好js文件，运行
+{% highlight js%}
+
+webpack --display-modules --display-chunks --config build/webpack.config.js
+
+{% endhighlight %}
+于是，可能回报错如下：
+<img src ="/img/in-post/vue(1)/error01.png"> 显示缺少 vue-template-compiler包，使用 npm install vue-template-compiler即可；再次运行，可以看到多了个output目录，在其子目录static中，可以看到main.XXXX.js
+<img src ="/img/in-post/vue(1)/vueMakedir.png">
+
+## 系统运行
+ 为了能自动的将打包的文件写入到html中，需要安装html-webpack-plugin插件，这个插件可以创建html文件，并自动将依赖写入html文件中，另外，还要安装express，
+ {% highlight js%}
+  npm install html-webpack-plugin --save-dev
+  npm install express --save-dev
+ {% endhighlight %}
+
+ webpack-dev-middleware中间件，它是对webpack一个简单的包装，它可以通过连接服务器服务那些从webpack发射出来的文件，它有一下几点好处：
+* 1、不会向硬盘写文件，而是在内存中，注意我们构建项目实际就是向硬盘写文件。
+* 2、当文件改变的时候，这个中间件不会再服务旧的包，你可以直接刷新浏览器就能看到最新的效果，这样你就不必等待构建的时间，所见即所得。
+
+
+下面我们在build目录中创建一个 dev-server.js 的文件，并写入一下内容：
+{% highlight js%}
+
+var express = require('express')
+var webpack = require('webpack')
+var config = require('./webpack.config.js')
+
+// 创建一个express实例
+var app = express()
+
+// 调用webpack并把配置传递过去
+var compiler = webpack(config)
+
+// 使用 webpack-dev-middleware 中间件
+var devMiddleware = require('webpack-dev-middleware')(compiler, {
+  publicPath: config.output.publicPath,
+  stats: {
+    colors: true,
+    chunks: false
+  }
+})
+
+// 注册中间件
+app.use(devMiddleware)
+
+// 监听 8888端口，开启服务器n
+app.listen(8888, function (err) {
+  if (err) {
+    console.log(err)
+    return
+  }
+  console.log('Listening at http://localhost:8888')
+})
+{% endhighlight %}
+
+此外，还需要修改webpack.config.js
+* 1.修改 output中的publicPath,
+* 2.增加plugins
+  {% highlight js%}
+   // nodejs 中的path模块
+   var path = require('path');
+   var HtmlWebpackPlugin = require('html-webpack-plugin')
+
+   module.exports = {
+     // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件
+     entry: path.resolve(__dirname, '../app/index.js'),
+     // 输出配置
+     output: {
+       path: path.resolve(__dirname, '../output/static'),
+       publicPath: '/',
+       filename: '[name].[hash].js',
+       chunkFilename: '[id].[chunkhash].js'
+     },
+     resolve: {
+       extensions: ['', '.js', '.vue'],
+       alias: {
+         'Vue': 'vue/dist/vue.js'
+       }
+     },
+     module: {
+
+       loaders: [
+         // 使用vue-loader 加载 .vue 结尾的文件
+         {
+           test: /\.vue$/,
+           loader: 'vue'
+         },
+         {
+           test: /\.js$/,
+           loader: 'babel?presets=es2015',
+           exclude: /node_modules/
+         }
+       ]
+     },
+     Favlist: {
+       loaders: {
+         js: 'babel'
+       }
+     },
+     plugins: [
+       new HtmlWebpackPlugin({
+         filename: 'app/index.html',
+         template: path.resolve(__dirname, '../app/index.html'),
+         inject: true
+       })
+     ]
+   }
+  {% endhighlight %}
+
+此时，运行
+  {% highlight js%}
+  node build/dev-server.js
+  {% endhighlight %}
+ 打开http://localhost:8888/app/index/index.html,应该可以看到项目已经正常跑起来了
+ <img src ="/img/in-post/vue(1)/vueStart.png">
+
+
+store 调用传入的 reducer 函数
+
+    1.Store 会把两个参数传入 reducer： 当前的 state 树和 action
+
+* 根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树
+
+    1.Redux 原生提供combineReducers()辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
+
+* Redux store 保存了根 reducer 返回的完整 state 树。
+
+
+## 参考资料
+
+* [http://cn.redux.js.org/docs/basics/DataFlow.html](http://cn.redux.js.org/docs/basics/DataFlow.html)
+* [源码 https://github.com/reactjs/react-redux](https://github.com/reactjs/react-redux)
+
+  —— Libei 后记于 2016.10 
