@@ -88,6 +88,6 @@ store.dispatch(addTodo('Learn about actions'))
 ## 参考资料
 
 * [http://cn.redux.js.org/docs/basics/DataFlow.html](http://cn.redux.js.org/docs/basics/DataFlow.html)
-* [源码 https://github.com/reactjs/react-redux](https://github.com/reactjs/react-redux)
+* [源码] https://github.com/reactjs/react-redux](https://github.com/reactjs/react-redux)
 
   —— Libei 后记于 2016.10 

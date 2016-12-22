@@ -277,8 +277,7 @@ store 调用传入的 reducer 函数
 
 
 ## 参考资料
-
-* [http://cn.redux.js.org/docs/basics/DataFlow.html](http://cn.redux.js.org/docs/basics/DataFlow.html)
-* [源码 https://github.com/reactjs/react-redux](https://github.com/reactjs/react-redux)
+* [http://www.cnblogs.com/wj204/p/6031435.html](http://www.cnblogs.com/wj204/p/6031435.html)
+* [参考2](https://github.com/HcySunYang/h5_frame)
 
   —— Libei 后记于 2016.10 
