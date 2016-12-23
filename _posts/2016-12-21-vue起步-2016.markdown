@@ -1,14 +1,14 @@
 ---
 layout:     post
 header-img: "img/post-bg-universe.jpg"
-title:      "vue学习笔记"
-subtitle:   "从0开始搭建 vue环境"
+title:      "vue学习笔记--vue2.0+webpack环境"
+subtitle:   "vue2.0+webpack环境"
 date:       2016-12-20 21:00:00
 author:     "Libei"
 tags:
     - vue webpack
 ---
- 
+代码地址 [github地址 ](https://github.com/libeily/vueWebpck)
 ## 新建目录
 首先新建一个目录，名为 vuePractice ，这是我们的项目目录。然后执行一些基本的步骤，比如 npm init 命令，在我们的项目中生成 package.json 文件，这几乎是必选的，因为我们的项目要有很多依赖，都是通过npm来管理的，而npm对于我们项目的管理，则是通过package.json文件：
 
@@ -263,20 +263,109 @@ app.listen(8888, function (err) {
   {% endhighlight %}
  打开http://localhost:8888/app/index/index.html,应该可以看到项目已经正常跑起来了
  <img src ="/img/in-post/vue(1)/vueStart.png">
+## 热加载
+现在我们已经使用 webpack-dev-middleware 搭建基本的开发环境了，但是我们并不满足，因为我们每次都要手动去刷新浏览器，所谓的热加载，意思就是说能够追踪我们代码的变化，并自动更新界面，甚至还能保留程序状态。要完成热加载，我们就需要使用另外一个中间件 webpack-hot-middleware
+修改webpack.config.js 配置和dev-server.js
+* 1.文件中入口配置中添加 ‘webpack-hot-middleware/client’，如下：
+* 2.在dev-server.js 文件中使用插件
+ {% highlight js%}
+// nodejs 中的path模块
+var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var webpack = require('webpack');
+module.exports = {
+  // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件
+  entry:['webpack-hot-middleware/client',path.resolve(__dirname, '../app/index.js')],
+  // 输出配置
+  output: {
+    path: path.resolve(__dirname, '../output/static'),
+    publicPath: '/',
+    filename: '[name].[hash].js',
+    chunkFilename: '[id].[chunkhash].js'
+  },
+  resolve: {
+    extensions: ['', '.js', '.vue'],
+    alias: {
+      'Vue': 'vue/dist/vue.js'
+    }
+  },
+  module: {
+    loaders: [
+      // 使用vue-loader 加载 .vue 结尾的文件
+      {
+        test: /\.vue$/,
+        loader: 'vue'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel?presets=es2015',
+        exclude: /node_modules/
+      }
+    ]
+  },
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'app/index.html',
+      template: path.resolve(__dirname, '../app/index.html'),
+      inject: true
+    })
+  ]
+}
+ {% endhighlight %}
+ dev-server.js修改
+{% highlight js%}
+// 引入必要的模块
+var express = require('express')
+var webpack = require('webpack')
+var config = require('./webpack.dev.conf')
 
+// 创建一个express实例
+var app = express()
 
-store 调用传入的 reducer 函数
+// 调用webpack并把配置传递过去
+var compiler = webpack(config)
 
-    1.Store 会把两个参数传入 reducer： 当前的 state 树和 action
+// 使用 webpack-dev-middleware 中间件
+var devMiddleware = require('webpack-dev-middleware')(compiler, {
+    publicPath: config.output.publicPath,
+    stats: {
+        colors: true,
+        chunks: false
+    }
+})
 
-* 根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树
+// 使用 webpack-hot-middleware 中间件
+var hotMiddleware = require('webpack-hot-middleware')(compiler)
 
-    1.Redux 原生提供combineReducers()辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
+// 注册中间件
+app.use(devMiddleware)
+// 注册中间件
+app.use(hotMiddleware)
 
-* Redux store 保存了根 reducer 返回的完整 state 树。
+// 监听 8888端口，开启服务器
+app.listen(8888, function (err) {
+    if (err) {
+        console.log(err)
+        return
+    }
+    console.log('Listening at http://localhost:8888')
+})
 
+{% endhighlight %}
 
+此时修改first.vue中的style，可以看到浏览器的字体颜色会自动改变，此时，整个系统的基本环境已经搭建完毕, 另外，为了方便运行，将package.json中的scripts标签改为如下，这样，每次打包的时候，仅需要npm run build ,而启动项目的时候，npm run dev即可
+{% highlight js%}
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --display-modules --display-chunks --config build/webpack.config.js",
+    "dev":"node build/dev-server.js  "
+  },
+{% endhighlight %}
 ## 参考资料
+* [github地址 ](https://github.com/libeily/vueWebpck)
 * [http://www.cnblogs.com/wj204/p/6031435.html](http://www.cnblogs.com/wj204/p/6031435.html)
 * [参考2](https://github.com/HcySunYang/h5_frame)
 
