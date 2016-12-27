@@ -1,0 +1,49 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "node路径问题分析"
+subtitle:   "使用path 处理文件路径"
+date:       2016-12-26 11:00:00
+author:     "Libei"
+tags:
+    - node js
+---
+  > “Node中 path.resolve相对路径, __dirname和process.argv[1]路径的问题”  
+
+这三个都可以用来返回当前目录的路径，区别是：
+* 在path.resolve中使用相对路径，结果是相对于运行Node.js程序的工作目录
+* __dirname始终指向当前js代码文件的目录。
+* process.argv[1]指向Node.js主程序（入口js文件）的路径（process.argv[0]是node本身的路径）
+
+示例代码：在test1目录下建立test文件下建立b.js :test1>test>b.js
+{% highlight js%}
+var path = require('path');
+
+console.log(__dirname+ '(__dirname)');//b.js父目录；总是返回被执行的 js 所在文件夹的绝对路径
+console.log(__filename+ '(__filename)');//b.js所在的目录路径；总是返回被执行的 js 的绝对路径
+console.log(process.cwd()+ '(process.cwd())');//总是返回运行 node 命令时所在的文件夹的绝对路径
+console.log(path.resolve('./')+ '(path.resolve(./))');
+console.log(path.dirname(process.argv[1]) + '(process.argv[1])');//process.argv[1]指向Node.js主程序（入口js文件）的路径（process.argv[0]是node本身的路径
+
+{% endhighlight %}
+首先，切换到test目录下运行 node b.js,可以看到结果如下
+/my-practice/test1/test(__dirname)
+/my-practice/test1/test/b.js(__filename)
+/my-practice/test1/test(process.cwd())
+/my-practice/test1/test(path.resolve(./))
+/my-practice/test1/test(process.argv[1])
+
+若我们将在test1目录下运行 node test/b.js ,可以看到结果如下
+/my-practice/test1/test(__dirname)
+/my-practice/test1/test/b.js(__filename)
+/my-practice/test1(process.cwd())
+/my-practice/test1(path.resolve(./))
+/my-practice/test1/test(process.argv[1])
+通过分析，可以得出结论
+
+* '__dirname'：总是返回被执行的 js 所在文件夹的绝对路径,不管在哪个目录下运行，路径都是：/my-practice/test1/test，也就是被执行js的父文件
+* '__filename'：总是返回被执行的 js 的绝对路径，也就是被执行js的所在路径，两个目录下运行，路径都为：/my-practice/test1/test/b.js
+* process.cwd()：总是返回运行 node 命令时所在的文件夹的绝对路径，在test目录下运行时，路径为：/my-practice/test1/test；而在test1目录下运行，结果则为/my-practice/test1
+* path.resolve('./')：path.resolve方法用于将相对路径转为绝对路径，可以理解为使用cd 命令，也就是cd ./ 于是在不同的运行目录下，显示的将为当前目录路径
+* process.argv[1]：//process.argv[1]指向Node.js主程序（入口js文件）的路径（process.argv[0]是node本身的路径
+
