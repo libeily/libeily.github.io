@@ -1,0 +1,31 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "关于'0'的问题"
+subtitle:   " '0'==0？ '0' == false"
+date:       2017-02-14 12:00:00
+author:     "LiBei"
+tags:
+    - 前端技术
+    - js
+---
+
+> “'0' ==0 ？”
+想到一个好玩的，运行如下 javascript ：
+
+{% highlight js%}
+if ('0') alert("'0' is true");
+if ('0' == false) alert("'0' is false");
+if ('0' == false) alert("'0' ==0 ");
+{% endhighlight %}
+结果是，两次都 alert 了！那么 '0' 到底是 true 还是 false 呢？
+答案是：在js做比较的时候，有这样的三条规则：
+* 如果比较的两者中有bool，会把 bool 先转换为对应的 number，即 0 和 1
+* 如果比较的双方中有一方为number一方为string，会把string转换为数字
+* 把string直接转换为bool的时候，空字符串‘’转换为 false，除此外的一切字符串转换为 true
+
+所以
+* 第一种情况下，'0'转化为并不为空字符串，所以if条件为true，于是执行了alert
+* 第二个情况中，首先将bool型的false转化为0，其次'0' == 0进行比较，也就是情况三，此时'0'将会转化为数字 0，于是'0'==0
+
+—— Libei 记于 2017.02

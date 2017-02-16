@@ -1,0 +1,70 @@
+---
+layout:     post
+header-img: "img/post-bg-universe.jpg"
+title:      "css隐藏多余的文字省略号"
+subtitle:   "text-overflow: ellipsis 文字省略号"
+date:       2017-02-12 12:00:00
+author:     "LiBei"
+tags:
+    - 前端技术
+    - css
+---
+
+> “单行文字益处省略”
+
+当使用单行文字显示时候，首先，要实现溢出时产生省略号的效果还须定义：强制文本在一行内显示（white-space:nowrap）及溢出内容为隐藏（overflow:hidden），只有这样才能实现溢出文本显示省略号的效果。
+也就是
+{% highlight js%}
+<style>
+    .box{
+    width: 100px;
+    border: 1px solid red;
+        }
+    .nowrap{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        }
+</style>
+
+<div class ='box nowrap'>
+    DIV CSS text-overflow文本有溢出时显示css省略号clip ellipsis样式基础知识与用法实例经验教程篇
+    有时为了避免文本文字内容超出一定宽度后溢出，我们想要溢出的部分不显示但用省略号（...）显示，这个时候我们可以使用CSS text-overflow文本溢出省略号属性样式实现。
+</div>
+
+{% endhighlight %}
+
+
+> “多行文字”
+
+上述的方法仅限于只有一行文字的时候使用，当面对想要显示若干行最后一行超出文字使用省略号时，在WebKit浏览器或移动端（绝大部分是WebKit内核的浏览器）的页面实现比较简单，可以直接使用WebKit的CSS扩展属性(WebKit是私有属性)-webkit-line-clamp 。
+
+-webkit-line-clamp用来限制在一个块元素显示的文本的行数。 为了实现该效果，它需要组合其他的WebKit属性。
+常见结合属性：
+* display: -webkit-box; 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。
+* -webkit-box-orient 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。
+* text-overflow: ellipsis;，可以用来多行文本的情况下，用省略号“…”隐藏超出范围的文本
+
+{% highlight js%}
+<style>
+    .box{
+        width: 100px;
+        border: 1px solid red;
+       }
+    .nowrap{
+       text-overflow: ellipsis;
+       display: -webkit-box;
+       overflow : hidden;
+       -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      }
+</style>
+
+<div class ='box nowrap'>
+    有时为了避免文本文字内容超出一定宽度后溢出，我们想要溢出的部分不显示但用省略号（...）显示，这个时候我们可以使用CSS text-overflow文本溢出省略号属性样式实现
+</div>
+
+{% endhighlight %}
+
+
+—— Libei 记于 2017.02
